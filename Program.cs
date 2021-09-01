@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SuncoastHumanResources
 {
@@ -75,21 +76,11 @@ namespace SuncoastHumanResources
         else
         if (choice == "F")
         {
-          // - Create a variable named **`foundEmployee`**
-          Employee foundEmployee = null;
-
           // - Prompt for the name
           var nameToSearchFor = PromptForString("What name are you looking for? ");
 
-          // - Loop through the list to look for a match
-          foreach(var employee in employees)
-          {
-            // - If we find one, update foundEmployee
-            if (employee.Name == nameToSearchFor)
-            {
-              foundEmployee = employee;
-            }
-          }
+          // - Use Linq to find result
+          Employee foundEmployee = employees.FirstOrDefault(employee => employee.Name == nameToSearchFor);
 
           // - After the loop, foundEmployee is either null (not found) or refers to the matching item
           if (foundEmployee == null)
