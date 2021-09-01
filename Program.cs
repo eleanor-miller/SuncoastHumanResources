@@ -76,42 +76,29 @@ namespace SuncoastHumanResources
         else
         if (choice == "D")
         {
+          // DELETE (out of CREATE - READ - UPDATE - DELETE [CRUD])
           // Get the employee name we are searching for
           var nameToSearchFor = PromptForString("What name are you looking for? ");
 
           // Search the database to see if they exist
           Employee foundEmployee = employees.FirstOrDefault(employee => employee.Name == nameToSearchFor);
 
-          // If we found an employee
-          if (foundEmployee != null)
+          // If we didn't find anyone
+          if (foundEmployee == null)
           {
-            // - We did find the employee
-            // - Show the details
-            Console.WriteLine($"{foundEmployee.Name} is in department {foundEmployee.Department} and makes ${foundEmployee.Salary}");
-
-            // - Ask to confirm
-            var confirm = PromptForString("Are you sure? [Y/N] ").ToUpper();
-
-            // - If they say no
-            if (confirm == "N")
-            {
-              //    - do nothing
-            }
-            else 
-            {
-              // - If they say yes
-              //    - delete them
-              employees.Remove(foundEmployee);
-            }
-         
+            Console.WriteLine("No such employee!");
           }
           else
           {
-            // otherwise
-            // we didn't
-            Console.WriteLine("No such employee!");
-          }
+            Console.WriteLine($"{foundEmployee.Name} is in department {foundEmployee.Department} and makes ${foundEmployee.Salary}");
 
+            var confirm = PromptForString("Are you sure? [Y/N] ").ToUpper();
+
+            if (confirm == "Y")
+            {
+              employees.Remove(foundEmployee);
+            }
+          }
         }
         else
         if (choice == "F")
@@ -145,6 +132,7 @@ namespace SuncoastHumanResources
           }
         }
         else
+        if (choice == "A")
         {
           // CREATE (out of CREATE - READ - UPDATE - DELETE [CRUD])
           // Make a new employee object
@@ -159,7 +147,11 @@ namespace SuncoastHumanResources
     
           employees.Add(employee);
         }
-
+        else
+        {
+          Console.WriteLine("Not a valid response! ");
+        }
+        
         // end of the `while` statement
       }
     }
