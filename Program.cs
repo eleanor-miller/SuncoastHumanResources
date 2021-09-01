@@ -15,6 +15,37 @@ namespace SuncoastHumanResources
     }
   }
 
+  class EmployeeDatabase
+  {
+    //var employees = new List<Employee>();
+    private List<Employee> Employees { get; set; } = new List<Employee>();
+    
+    // CREATE Add employee
+    public void AddEmployee(Employee newEmployee)
+    {
+      Employees.Add(newEmployee);
+    }
+
+    // READ Get all the employees
+    public List<Employee> GetAllEmployees()
+    {
+      return Employees;
+    }
+
+    // READ Find one employee
+    public Employee FindOneEmployee(string nameToFind)
+    {
+      Employee foundEmployee = Employees.FirstOrDefault(employee => employee.Name.ToUpper().Contains(nameToFind.ToUpper()));
+
+      return foundEmployee;
+    }
+
+    // DELETE Delete employee
+    public void DeleteEmployee(Employee employeeToDelete)
+    {
+      Employees.Remove(employeeToDelete);
+    }
+  }
   class Program
   {
     static void DisplayGreeting()
@@ -53,7 +84,7 @@ namespace SuncoastHumanResources
 
     static void Main(string[] args)
     {
-      var employees = new List<Employee>();
+      var database = new EmployeeDatabase();
 
       DisplayGreeting();
 
@@ -65,7 +96,7 @@ namespace SuncoastHumanResources
       {
         // Insert a blank line then prompt them and get their answer (force uppercase)
         Console.WriteLine();
-        Console.WriteLine("What do you want to do?\n(A)dd an employee\n(D)elete an employee\n(F)ind an employee\n(S)how all the employees\n(Q)uit\n: ");
+        Console.WriteLine("What do you want to do?\n(A)dd an employee\n(D)elete an employee\n(F)ind an employee\n(S)how all the employees\n(U)pdate an employee\n(Q)uit\n: ");
         var choice = Console.ReadLine().ToUpper();
 
         if (choice == "Q")
@@ -81,7 +112,7 @@ namespace SuncoastHumanResources
           var nameToSearchFor = PromptForString("What name are you looking for? ");
 
           // Search the database to see if they exist
-          Employee foundEmployee = employees.FirstOrDefault(employee => employee.Name == nameToSearchFor);
+          Employee foundEmployee = database.FindOneEmployee(nameToSearchFor);
 
           // If we didn't find anyone
           if (foundEmployee == null)
@@ -96,7 +127,7 @@ namespace SuncoastHumanResources
 
             if (confirm == "Y")
             {
-              employees.Remove(foundEmployee);
+              database.DeleteEmployee(foundEmployee);
             }
           }
         }
@@ -107,7 +138,7 @@ namespace SuncoastHumanResources
           var nameToSearchFor = PromptForString("What name are you looking for? ");
 
           // - Use Linq to find result
-          Employee foundEmployee = employees.FirstOrDefault(employee => employee.Name == nameToSearchFor);
+          Employee foundEmployee = database.FindOneEmployee(nameToSearchFor);
 
           // - After the loop, foundEmployee is either null (not found) or refers to the matching item
           if (foundEmployee == null)
@@ -125,7 +156,7 @@ namespace SuncoastHumanResources
         if (choice == "S")
         {
           // READ (out of CREATE - READ - UPDATE - DELETE [CRUD])
-          foreach(var employee in employees)
+          foreach(var employee in database.GetAllEmployees())
           {
             // And print details
             Console.WriteLine($"{employee.Name} is in department {employee.Department} and makes ${employee.Salary}");
@@ -145,7 +176,47 @@ namespace SuncoastHumanResources
 
           Console.WriteLine($"Hello, {employee.Name} you make {employee.MonthlySalary()} dollars per month.");
     
-          employees.Add(employee);
+          database.AddEmployee(employee);
+        }
+        else
+        if (choice == "U")
+        // UPDATE (out of CREATE - READ - UPDATE - DELETE [CRUD])
+        {
+          // Get the employee name we are searching for
+          var nameToSearchFor = PromptForString("What name are you looking for? ");
+          // Search the database to see if they exist
+          Employee foundEmployee = database.FindOneEmployee(nameToSearchFor);
+          // If we didn't find anyone
+          if (foundEmployee == null)
+          {
+            // Show that the person doesn't exist
+            Console.WriteLine("No such employee!");
+          }
+          else
+          {
+            Console.WriteLine($"{foundEmployee.Name} is in department {foundEmployee.Department} and makes ${foundEmployee.Salary}");
+            var changeChoice = PromptForString("What do you want to change [Name/Department/Salary]? ").ToUpper();
+
+            //    - if name
+            //      - prompt for a new name
+            if (changeChoice == "NAME")
+            {
+              foundEmployee.Name = PromptForString("What is the new name? ");
+            }
+            //    - if the department
+            //      - prompt for a new department
+            if (changeChoice == "DEPARTMENT")
+            {
+              foundEmployee.Department = PromptForInteger("What is the new department number? ");
+            }
+            //    - if salary
+            //      - prompt for a new salary
+            if (changeChoice == "SALARY")
+            {
+              foundEmployee.Salary = PromptForInteger("What is the new yearly salary? ");
+            }
+          }
+
         }
         else
         {
