@@ -86,9 +86,8 @@ namespace SuncoastHumanResources
                         Console.WriteLine("Not a valid response! ");
                         break;
                 }
+                database.SaveEmployees();
             }
-
-            database.SaveEmployees();
         }
 
         private static void DeleteEmployee(EmployeeDatabase database)
