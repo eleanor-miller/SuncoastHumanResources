@@ -3,90 +3,93 @@
 namespace SuncoastHumanResources
 {
     class Program
-  {
-    static void DisplayGreeting()
     {
-      Console.WriteLine("----------------------------------------");
-      Console.WriteLine("    Welcome to Our Employee Database    ");
-      Console.WriteLine("----------------------------------------");
-      Console.WriteLine();
-      Console.WriteLine();
-    }
-
-    static string PromptForString(string prompt)
-    {
-      Console.Write(prompt);
-      var userInput = Console.ReadLine();
-
-      return userInput;
-    }
-
-    static int PromptForInteger(string prompt)
-    {
-      Console.Write(prompt);
-      int userInput;
-      var isThisGoodInput = Int32.TryParse(Console.ReadLine(), out userInput);
-
-      if (isThisGoodInput)
-      {
-        return userInput;
-      }
-      else
-      {
-        Console.WriteLine("Sorry, that isn't a valid input, I'm using 0 as your answer.");
-        return 0;
-      }
-    }
-
-    static void Main(string[] args)
-    {
-      var database = new EmployeeDatabase();
-
-      DisplayGreeting();
-
-      // Should we keep showing the menu?
-      var keepGoing = true;
-
-      // While the user hasn't said QUIT yet
-      while (keepGoing)
-      {
-        // Insert a blank line then prompt them and get their answer (force uppercase)
-        Console.WriteLine();
-        Console.WriteLine("What do you want to do?\n(A)dd an employee\n(D)elete an employee\n(F)ind an employee\n(S)how all the employees\n(U)pdate an employee\n(Q)uit\n: ");
-        var choice = Console.ReadLine().ToUpper();
-
-        switch (choice)
+        static void DisplayGreeting()
         {
-          case "Q":
-            keepGoing = false;
-            break;
-          
-          case "D":
-            DeleteEmployee(database);
-            break;
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine("    Welcome to Our Employee Database    ");
+            Console.WriteLine("----------------------------------------");
+            Console.WriteLine();
+            Console.WriteLine();
+        }
 
-          case "F":
-            ShowEmployee(database);
-            break;
+        static string PromptForString(string prompt)
+        {
+            Console.Write(prompt);
+            var userInput = Console.ReadLine();
 
-          case "S":
-            ShowAllEmployees(database);
-            break;
+            return userInput;
+        }
 
-          case "A":
-            AddEmployee(database);
-            break;
+        static int PromptForInteger(string prompt)
+        {
+            Console.Write(prompt);
+            int userInput;
+            var isThisGoodInput = Int32.TryParse(Console.ReadLine(), out userInput);
 
-          case "U":
-            UpdateEmployee(database);
-            break;
+            if (isThisGoodInput)
+            {
+                return userInput;
+            }
+            else
+            {
+                Console.WriteLine("Sorry, that isn't a valid input, I'm using 0 as your answer.");
+                return 0;
+            }
+        }
 
-          default:
-            Console.WriteLine("Not a valid response! ");
-            break;
-        }      
-      }
-    }
+        static void Main(string[] args)
+        {
+            var database = new EmployeeDatabase();
+            database.LoadEmployees();
+
+            DisplayGreeting();
+
+            // Should we keep showing the menu?
+            var keepGoing = true;
+
+            // While the user hasn't said QUIT yet
+            while (keepGoing)
+            {
+                // Insert a blank line then prompt them and get their answer (force uppercase)
+                Console.WriteLine();
+                Console.WriteLine("What do you want to do?\n(A)dd an employee\n(D)elete an employee\n(F)ind an employee\n(S)how all the employees\n(U)pdate an employee\n(Q)uit\n: ");
+                var choice = Console.ReadLine().ToUpper();
+
+                switch (choice)
+                {
+                    case "Q":
+                        keepGoing = false;
+                        break;
+
+                    case "D":
+                        DeleteEmployee(database);
+                        break;
+
+                    case "F":
+                        ShowEmployee(database);
+                        break;
+
+                    case "S":
+                        ShowAllEmployees(database);
+                        break;
+
+                    case "A":
+                        AddEmployee(database);
+                        break;
+
+                    case "U":
+                        UpdateEmployee(database);
+                        break;
+
+                    default:
+                        Console.WriteLine("Not a valid response! ");
+                        break;
+                }
+            }
+
+            database.SaveEmployees();
+        }
 
         private static void DeleteEmployee(EmployeeDatabase database)
         {
